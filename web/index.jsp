@@ -34,14 +34,16 @@
         </div>
       </header>
 
+      <form accept-charset="ISO-8859-1" id="search_form" method="post" action="<c:url value="/search"/>">
       <main role="main" class="inner cover">
           <img src="Imagenes/Excelsior.png" style="width: 700px">
         <h3>Todo lo que necesitás, en un solo lugar.</h3>
         <p class="lead">
-            <input type="text" id="buscar_txt">
-          <a href="#" class="btn btn-lg btn-secondary">Buscar</a>
+            <input type="text" name="buscar_txt" id="buscar_txt">
+            <input type="submit" class="btn btn-lg btn-secondary" value="Buscar">
         </p>
       </main>
+      </form>
 
       <footer class="mastfoot mt-auto">
         <div class="inner">

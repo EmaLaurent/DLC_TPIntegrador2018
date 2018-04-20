@@ -1,12 +1,12 @@
 <%-- 
-    Document   : index
-    Created on : 18/04/2018, 16:28:20
+    Document   : busqueda
+    Created on : 19/04/2018, 20:56:47
     Author     : Emanuel Laurent
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="icon" href="Imagenes/icono.jpg">
-    <title>Excelsior!</title>
+    <title>Resultados de Búsqueda</title>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -26,25 +26,12 @@
       <header class="masthead mb-auto">
         <div class="inner">
           <h3 class="masthead-brand">Excelsior! Search</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#">Inicio</a>
-            <a class="nav-link" href="#">Características</a>
-            <a class="nav-link" href="#">Contacto</a>
-          </nav>
-        </div>
       </header>
 
-      <form accept-charset="ISO-8859-1" id="search_form" method="post" action="<c:url value="/search"/>">
-      <main role="main" class="inner cover">
-          <img src="Imagenes/Excelsior.png" style="width: 700px">
-        <h3>Todo lo que necesitás, en un solo lugar.</h3>
-        <p class="lead">
-            <input type="text" name="buscar_txt" id="buscar_txt">
-            <input type="submit" class="btn btn-lg btn-secondary" value="Buscar">
-        </p>
-      </main>
-      </form>
-
+        <h2>Resultados de Búsqueda para : ${busqueda}</h2>
+        <hr width="80%" style="background: gray">
+        <h4>Todavía no hay nada wacho!!</h4>
+        <hr width="80%" style="background: gray">
       <footer class="mastfoot mt-auto">
         <div class="inner">
           <p>©Copyrigth 2018 <a href="https://getbootstrap.com/">UTN Solutions</a>, by <a href="https://www.instagram.com/emaalaurent/">@emaalaurent</a>.</p>
