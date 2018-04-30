@@ -22,44 +22,48 @@
         <link href="<c:url value="/css/cover.css"/>" rel="stylesheet" type="text/css" />
     </head>
     <body class="text-center">
-        <div class="d-flex h-100 p-3 mx-auto flex-column">
-            <header class="masthead">
-                <div class="inner">
+        <div class="container-fluid d-flex flex-column p-3">
+            <div class="d-flex justify-content-between">
+                <div class="p-2">
                     <h3 class="masthead-brand">Excelsior! Search</h3>
+                </div>
+                <div class="p-2">
                     <nav class="nav nav-masthead justify-content-center">
-                    <a class="nav-link active" href="#">Inicio</a>
+                    <a class="nav-link active" href="/DLC_TPIntegrador2018">Inicio</a>
                     <a class="nav-link" href="#">Características</a>
                     <a class="nav-link" href="#">Contacto</a>
                     </nav>
                 </div>
-            </header>
-            <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-2">
-                    <button type="button" id="indexar_btn" class="btn btn-outline-danger" >Indexar</button>
-                </div>
-                <div class="col-4">
-                    <label class="badge badge-pill badge-danger">Cantidad de palabras indexadas: ${cantPalabras}</label>
+            </div>
+            <div class="row">
+                <div class="d-flex justify-content-center col-12">
+                    <div class='p-3'>
+                        <button type="button" id="indexar_btn" class="btn btn-outline-danger" >Indexar</button>
+                    </div>
+                    <div class='p-3'>
+                        <label class="badge badge-pill badge-danger">Cantidad de palabras indexadas: ${cantPalabras}</label>
+                    </div>
                 </div>
             </div>
+            <div class="mt-auto">
+                <form accept-charset="ISO-8859-1" id="search_form" method="post" action="<c:url value="/search"/>">
+                    <main role="main" class="inner cover">
+                        <img src="Imagenes/Excelsior03.png" class="col-7">
+                        <h3>Todo lo que necesitás, en un solo lugar.</h3>
+                        <p class="lead">
+                            <input type="text" name="buscar_txt" id="buscar_txt" class="col-6">
+                            <input type="submit" class="btn btn-lg btn-secondary" value="Buscar">
+                        </p>
+                    </main>
+                </form>
             </div>
-            <div class="col-sm-2"></div>
-            <form accept-charset="ISO-8859-1" id="search_form" method="post" action="<c:url value="/search"/>">
-                <main role="main" class="inner cover">
-                    <img src="Imagenes/Excelsior.png" style="width: 700px">
-                    <h3>Todo lo que necesitás, en un solo lugar.</h3>
-                    <p class="lead">
-                        <input type="text" name="buscar_txt" id="buscar_txt">
-                        <input type="submit" class="btn btn-lg btn-secondary" value="Buscar">
-                    </p>
-                </main>
-            </form>
-
             <footer class="mastfoot mt-auto">
                 <div class="inner">
                     <p>©Copyrigth 2018 <a href="https://getbootstrap.com/">UTN Solutions</a>, by <a href="https://www.instagram.com/emaalaurent/">@emaalaurent</a>.</p>
                 </div>
             </footer>
+        </div>         
+        
         </div>
         <script type="text/javascript">
             function indexar() 

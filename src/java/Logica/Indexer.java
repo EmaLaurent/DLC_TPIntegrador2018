@@ -18,7 +18,8 @@ public class Indexer
 
     public Indexer()
     {
-  
+        archivoPr = new ProcesadorArchivo();
+        hash = new TSB_OAHashtable<>(); 
     }
 
     public TSB_OAHashtable<String, DatosTermino> getHash()
@@ -28,7 +29,7 @@ public class Indexer
     
     public void indexarDirectorio()
     {
-        File directorio = new File("/Documentos");
+        File directorio = new File("Documentos");
         for (File archivo : directorio.listFiles())
         {
             archivoPr.setFile(archivo);
