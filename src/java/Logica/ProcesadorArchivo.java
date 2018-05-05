@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.ArrayList;
 
 /**
  *
@@ -38,7 +39,7 @@ public class ProcesadorArchivo
             }
             catch(IOException e)
             {
-              System.out.println("Error: " + e.getMessage());    
+                System.out.println("Error: " + e.getMessage());    
             }
         }
         else
@@ -60,6 +61,9 @@ public class ProcesadorArchivo
             String regex = "[^a-zA-ZñÑá-úÁ-Ú]";
             Scanner scanner = new Scanner(file,"ISO-8859-1").useDelimiter(regex);
             String aux[], separadores = "[ 0-9\\.,»«/=º°ª\\-\\+_;:?!¡¿#%\\(\\)\\*\\$\'\"\\[\\]]+";
+            
+            ArrayList<DatosPosteo> listaPosteo;
+            
             while(scanner.hasNext())
             {
                 aux = scanner.nextLine().split(separadores);
@@ -70,6 +74,9 @@ public class ProcesadorArchivo
                     {
                         DatosTermino dt = new DatosTermino();
                         hash.put(st, dt);
+                        
+                        listaPosteo = new ArrayList<DatosPosteo>();
+                        listaPosteo.add(new DatosPosteo(file));
                     }
                     else
                     {
@@ -80,13 +87,45 @@ public class ProcesadorArchivo
                             Entry<String,DatosTermino> x = it.next();
                             if(x.getKey().equals(st))
                             {
-                                DatosTermino auxDt = x.getValue();
-                                auxDt.setMaxTf(auxDt.getMaxTf() + 1); //por ahora maxTf es el contador de veces que aparece la palabra
-                                x.setValue(auxDt);
+                                // aca obtendriamos la Lista de Posteo del termino en el que estamos
+                                // y recorreriamos la lista hasta encontrar el archivo que coincide con el archivo
+                                // al que estamos recorriendo ahora
+                                //**** listaPosteo = SELECT ListaPosteo FROM TablaListas WHERE Palabra == st ****
+                                listaPosteo = new ArrayList<DatosPosteo>(); // pongo para que compile - hasta hacer el SQL
+                                Iterator<DatosPosteo> it2 = listaPosteo.iterator();
+                                while(it2.hasNext())
+                                {
+                                    DatosPosteo dp = it2.next();
+                                    if (dp.getArchivo().equals(this.file)) // encontramos el archivo en la lista de posteo
+                                    {
+                                        dp.setTf(dp.getTf() + 1); // se incrementa en uno el tf
+                                        if (dp.getTf() < x.getValue().getMaxTf()) // comparo el tf de este doc con el max tf de la palabra
+                                        {
+                                            x.getValue().setMaxTf(dp.getTf()); // reemplazo el maxTf en el vocabulario
+                                        }
+                                        break;
+                                    }
+                                    else // si no esta el archivo
+                                    {
+                                        listaPosteo.add(new DatosPosteo(this.file)); // entonces lo agregamos a la lista de posteo
+                                        DatosTermino dt = x.getValue();
+                                        dt.setNr(dt.getNr() + 1); // incrementamos el nr la palabra en el vocabulario
+                                    }
+                                    
+                                }
+                                
+                                // esto no iria para mi
+                                //DatosTermino auxDt = x.getValue();
+                                //auxDt.setMaxTf(auxDt.getMaxTf() + 1); //por ahora maxTf es el contador de veces que aparece la palabra
+                                //x.setValue(auxDt);
+                                
+                                // UPDATE la fila de la palabra en cuestion, en la BD
+                                
                                 break;
                             }
                         }
-                    }      
+                    }
+                    // aca yo haría un insert a la base de datos usando st como PK y en la otra columna meter la lista
                 } 
             }
             OAHashtableWriter htw = new OAHashtableWriter();
