@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Logica;
-
-import java.io.File;
+package Entidades;
 
 /**
  *
@@ -13,23 +11,28 @@ import java.io.File;
  */
 public class DatosPosteo
 {
-    private File archivo;
+    private String nombreDocumento;
     private int tf;
     
-    public DatosPosteo(File arch)
+    public DatosPosteo()
     {
-        archivo = arch;
+        
+    }
+    
+    public DatosPosteo(String nombDoc)
+    {
+        nombreDocumento = nombDoc;
         tf = 1;
     }
 
-    public File getArchivo()
+    public String getNombreDocumento()
     {
-        return archivo;
+        return nombreDocumento;
     }
 
-    public void setArchivo(File archivo)
+    public void setNombreDocumento(String nombDoc)
     {
-        this.archivo = archivo;
+        this.nombreDocumento = nombDoc;
     }
 
     public int getTf()
@@ -40,7 +43,5 @@ public class DatosPosteo
     public void setTf(int tf)
     {
         this.tf = tf;
-    }
-    
-    
+    }  
 }

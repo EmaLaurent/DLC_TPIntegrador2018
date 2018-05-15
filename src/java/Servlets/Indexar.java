@@ -40,9 +40,9 @@ public class Indexar extends HttpServlet
         try
         {
             indx.indexarDirectorio();
-            dest = "/index.jsp";
             tablaHash = indx.getHash();
-            request.setAttribute("cantPalabras",tablaHash.size()); 
+            request.setAttribute("cantPalabras",tablaHash.size());
+            dest = "/index.jsp";
         }
         catch(Exception e)
         {

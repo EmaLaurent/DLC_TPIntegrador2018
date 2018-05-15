@@ -5,17 +5,20 @@
  */
 package Logica;
 
+import DataBase.DBPosteo;
+import Entidades.DatosTermino;
+import Entidades.DatosPosteo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.ArrayList;
 
 /**
  *
@@ -26,10 +29,13 @@ public class ProcesadorArchivo
 
     private File file;
     private TSB_OAHashtable<String,DatosTermino> hash;
-
+    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+//    private final String PATHVOCABULARIO = "";
+//    private final String PATHVOCABULARIO = "";
+    
     public ProcesadorArchivo()
     {
-        File data = new File("tabla.dat");
+        File data = new File(PATHVOCABULARIO);
         if(data.exists())
         {
             try
@@ -61,9 +67,7 @@ public class ProcesadorArchivo
             String regex = "[^a-zA-ZñÑá-úÁ-Ú]";
             Scanner scanner = new Scanner(file,"ISO-8859-1").useDelimiter(regex);
             String aux[], separadores = "[ 0-9\\.,»«/=º°ª\\-\\+_;:?!¡¿#%\\(\\)\\*\\$\'\"\\[\\]]+";
-            
-            ArrayList<DatosPosteo> listaPosteo;
-            
+            DBPosteo dbp = new DBPosteo();
             while(scanner.hasNext())
             {
                 aux = scanner.nextLine().split(separadores);
@@ -74,9 +78,8 @@ public class ProcesadorArchivo
                     {
                         DatosTermino dt = new DatosTermino();
                         hash.put(st, dt);
-                        
-                        listaPosteo = new ArrayList<DatosPosteo>();
-                        listaPosteo.add(new DatosPosteo(file));
+                        DatosPosteo dp = new DatosPosteo(file.getName());
+                        dbp.insertarPosteo(st, dp);
                     }
                     else
                     {
@@ -87,45 +90,26 @@ public class ProcesadorArchivo
                             Entry<String,DatosTermino> x = it.next();
                             if(x.getKey().equals(st))
                             {
-                                // aca obtendriamos la Lista de Posteo del termino en el que estamos
-                                // y recorreriamos la lista hasta encontrar el archivo que coincide con el archivo
-                                // al que estamos recorriendo ahora
-                                //**** listaPosteo = SELECT ListaPosteo FROM TablaListas WHERE Palabra == st ****
-                                listaPosteo = new ArrayList<DatosPosteo>(); // pongo para que compile - hasta hacer el SQL
-                                Iterator<DatosPosteo> it2 = listaPosteo.iterator();
-                                while(it2.hasNext())
+                                DatosPosteo dpDoc = dbp.obtenerPorDocumento(st, file.getName()); //obtenemos el objeto de posteo correspondiente al archivo actual
+                                if(dpDoc != null)
                                 {
-                                    DatosPosteo dp = it2.next();
-                                    if (dp.getArchivo().equals(this.file)) // encontramos el archivo en la lista de posteo
+                                    dpDoc.setTf(dpDoc.getTf() + 1); // se incrementa en uno el tf
+                                    if (dpDoc.getTf() > x.getValue().getMaxTf()) // comparo el tf de este doc con el max tf de la palabra
                                     {
-                                        dp.setTf(dp.getTf() + 1); // se incrementa en uno el tf
-                                        if (dp.getTf() < x.getValue().getMaxTf()) // comparo el tf de este doc con el max tf de la palabra
-                                        {
-                                            x.getValue().setMaxTf(dp.getTf()); // reemplazo el maxTf en el vocabulario
-                                        }
-                                        break;
+                                        x.getValue().setMaxTf(dpDoc.getTf()); // reemplazo el maxTf en el vocabulario
                                     }
-                                    else // si no esta el archivo
-                                    {
-                                        listaPosteo.add(new DatosPosteo(this.file)); // entonces lo agregamos a la lista de posteo
-                                        DatosTermino dt = x.getValue();
-                                        dt.setNr(dt.getNr() + 1); // incrementamos el nr la palabra en el vocabulario
-                                    }
-                                    
+                                    dbp.actualizarPosteo(st, dpDoc);
                                 }
-                                
-                                // esto no iria para mi
-                                //DatosTermino auxDt = x.getValue();
-                                //auxDt.setMaxTf(auxDt.getMaxTf() + 1); //por ahora maxTf es el contador de veces que aparece la palabra
-                                //x.setValue(auxDt);
-                                
-                                // UPDATE la fila de la palabra en cuestion, en la BD
-                                
+                                else // si no esta el documento
+                                {
+                                    DatosPosteo dp = new DatosPosteo(file.getName());
+                                    dbp.insertarPosteo(st, dp);
+                                    x.getValue().setNr(x.getValue().getNr() + 1); // incrementamos el nr la palabra en el vocabulario
+                                }
                                 break;
                             }
                         }
                     }
-                    // aca yo haría un insert a la base de datos usando st como PK y en la otra columna meter la lista
                 } 
             }
             OAHashtableWriter htw = new OAHashtableWriter();
@@ -138,6 +122,10 @@ public class ProcesadorArchivo
         catch(IOException e)
         {
             System.out.println("Error: " + e.getMessage());    
+        } 
+        catch (ClassNotFoundException | SQLException e)
+        {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

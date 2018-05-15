@@ -5,6 +5,7 @@
  */
 package Logica;
 
+import Entidades.DatosTermino;
 import java.io.File;
 
 /**
@@ -15,7 +16,10 @@ public class Indexer
 {
     private ProcesadorArchivo archivoPr;
     private TSB_OAHashtable<String,DatosTermino> hash;
-
+    private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos"; 
+//    private final String PATHINDEXACION = "";
+//    private final String PATHINDEXACION = "";
+    
     public Indexer()
     {
         archivoPr = new ProcesadorArchivo();
@@ -29,7 +33,7 @@ public class Indexer
     
     public void indexarDirectorio()
     {
-        File directorio = new File("Documentos");
+        File directorio = new File(PATHINDEXACION);
         for (File archivo : directorio.listFiles())
         {
             archivoPr.setFile(archivo);

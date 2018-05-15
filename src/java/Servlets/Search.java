@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import DataBase.DBPosteo;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -37,12 +38,13 @@ public class Search extends HttpServlet
         try
         {
             String busqueda = request.getParameter("buscar_txt");
-            dest = "/busqueda.jsp";
             request.setAttribute("busqueda", busqueda);
+            dest = "/busqueda.jsp";
+            
         }
         catch (Exception e)
         {
-            
+            System.out.println(e.getMessage());
         }
         
         ServletContext app = this.getServletContext();
