@@ -13,12 +13,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -40,7 +45,7 @@ public class ProcesadorArchivo
         {
             try
             {
-                OAHashtableReader slr = new OAHashtableReader();
+                OAHashtableReader slr = new OAHashtableReader(PATHVOCABULARIO);
                 hash = (TSB_OAHashtable<String,DatosTermino>) slr.read();
             }
             catch(IOException e)
@@ -63,56 +68,53 @@ public class ProcesadorArchivo
     {
         try
         {
-            //Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
+//            List<String> lines = Files.lines(Paths.get(file.getPath()), Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+//            Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
             String regex = "[^a-zA-ZñÑá-úÁ-Ú]";
             Scanner scanner = new Scanner(file,"ISO-8859-1").useDelimiter(regex);
             String aux[], separadores = "[ 0-9\\.,»«/=º°ª\\-\\+_;:?!¡¿#%\\(\\)\\*\\$\'\"\\[\\]]+";
             DBPosteo dbp = new DBPosteo();
             while(scanner.hasNext())
-            {
+//            for (String line : lines)
+            {                
+//                aux = line.split(separadores);
                 aux = scanner.nextLine().split(separadores);
                 for(String st : aux)
                 {
                     st = st.toLowerCase();
-                    if(!hash.containsKey(st))
+                    if(!st.equals(""))
                     {
-                        DatosTermino dt = new DatosTermino();
-                        hash.put(st, dt);
-                        DatosPosteo dp = new DatosPosteo(file.getName());
-                        dbp.insertarPosteo(st, dp);
-                    }
-                    else
-                    {
-                        Set<Map.Entry<String,DatosTermino>> se = hash.entrySet();
-                        Iterator<Map.Entry<String,DatosTermino>> it = se.iterator();
-                        while(it.hasNext())
+                        if(!hash.containsKey(st))
                         {
-                            Entry<String,DatosTermino> x = it.next();
-                            if(x.getKey().equals(st))
+                            DatosTermino dt = new DatosTermino();
+                            hash.put(st, dt);
+                            DatosPosteo dp = new DatosPosteo(file.getName());
+                            dbp.insertarPosteo(st, dp);
+                        }
+                        else
+                        {
+                            DatosTermino x = hash.get(st);
+                            DatosPosteo dpDoc = dbp.obtenerPorDocumento(st, file.getName()); //obtenemos el objeto de posteo correspondiente al archivo actual
+                            if(dpDoc != null)
                             {
-                                DatosPosteo dpDoc = dbp.obtenerPorDocumento(st, file.getName()); //obtenemos el objeto de posteo correspondiente al archivo actual
-                                if(dpDoc != null)
+                                dpDoc.setTf(dpDoc.getTf() + 1); // se incrementa en uno el tf
+                                if (dpDoc.getTf() > x.getMaxTf()) // comparo el tf de este doc con el max tf de la palabra
                                 {
-                                    dpDoc.setTf(dpDoc.getTf() + 1); // se incrementa en uno el tf
-                                    if (dpDoc.getTf() > x.getValue().getMaxTf()) // comparo el tf de este doc con el max tf de la palabra
-                                    {
-                                        x.getValue().setMaxTf(dpDoc.getTf()); // reemplazo el maxTf en el vocabulario
-                                    }
-                                    dbp.actualizarPosteo(st, dpDoc);
+                                    x.setMaxTf(dpDoc.getTf()); // reemplazo el maxTf en el vocabulario
                                 }
-                                else // si no esta el documento
-                                {
-                                    DatosPosteo dp = new DatosPosteo(file.getName());
-                                    dbp.insertarPosteo(st, dp);
-                                    x.getValue().setNr(x.getValue().getNr() + 1); // incrementamos el nr la palabra en el vocabulario
-                                }
-                                break;
+                                dbp.actualizarPosteo(st, dpDoc);
+                            }
+                            else // si no esta el documento
+                            {
+                                DatosPosteo dp = new DatosPosteo(file.getName());
+                                dbp.insertarPosteo(st, dp);
+                                x.setNr(x.getNr() + 1); // incrementamos el nr la palabra en el vocabulario
                             }
                         }
-                    }
-                } 
-            }
-            OAHashtableWriter htw = new OAHashtableWriter();
+                    } 
+                }
+            }      
+            OAHashtableWriter htw = new OAHashtableWriter(PATHVOCABULARIO);
             htw.write( hash );
         }
         catch (FileNotFoundException ex) 

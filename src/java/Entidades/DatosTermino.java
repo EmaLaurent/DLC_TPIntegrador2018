@@ -5,11 +5,13 @@
  */
 package Entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Emanuel Laurent
  */
-public class DatosTermino
+public class DatosTermino implements Serializable
 {
     private int nr;
     private int maxTf;
