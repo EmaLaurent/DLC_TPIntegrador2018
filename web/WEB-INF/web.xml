@@ -4,9 +4,17 @@
         <servlet-name>Search</servlet-name>
         <servlet-class>Servlets.Search</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Indexar</servlet-name>
+        <servlet-class>Servlets.Indexar</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Search</servlet-name>
         <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Indexar</servlet-name>
+        <url-pattern>/indexar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -5,21 +5,21 @@
  */
 package Servlets;
 
-import DataBase.DBPosteo;
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Logica.Indexer;
+import Logica.TSB_OAHashtable;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 
 /**
  *
- * @author milen
+ * @author Emanuel Laurent
  */
-public class Search extends HttpServlet
+public class Indexar extends HttpServlet
 {
 
     /**
@@ -32,21 +32,22 @@ public class Search extends HttpServlet
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException
+            throws ServletException, IOException
     {
         String dest = "/error.html";
+        Indexer indx = new Indexer();
+        TSB_OAHashtable tablaHash;
         try
         {
-            String busqueda = request.getParameter("buscar_txt");
-            request.setAttribute("busqueda", busqueda);
-            dest = "/busqueda.jsp";
+            indx.indexarDirectorio();
+            tablaHash = indx.getHash();
+            request.setAttribute("cantPalabras",tablaHash.size());
+            dest = "/index.jsp";
+        }
+        catch(Exception e)
+        {
             
         }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        
         ServletContext app = this.getServletContext();
         RequestDispatcher disp = app.getRequestDispatcher(dest);
         disp.forward(request, response);

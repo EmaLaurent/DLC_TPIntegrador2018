@@ -5,7 +5,7 @@
 /* Links */
 a,
 a:focus,
-a:hover {
+a:hover{
   color: #fff;
 }
 
@@ -103,8 +103,4 @@ body {
  */
 .mastfoot {
   color: rgba(255, 255, 255, .5);
-}
-
-#buscar_txt{
-  width: 600px;  
 }
