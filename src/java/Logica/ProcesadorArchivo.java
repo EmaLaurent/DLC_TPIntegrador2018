@@ -8,26 +8,19 @@ package Logica;
 import DataBase.DBPosteo;
 import Entidades.DatosTermino;
 import Entidades.DatosPosteo;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 /**
  *
- * @author Heredia,Laurent
+ * @author Laurent
  */
 public class ProcesadorArchivo 
 {
@@ -68,20 +61,17 @@ public class ProcesadorArchivo
     {
         try
         {
-//            List<String> lines = Files.lines(Paths.get(file.getPath()), Charset.forName("ISO-8859-1")).collect(Collectors.toList());
-//            Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
             String regex = "[^a-zA-ZñÑá-úÁ-Ú]";
             Scanner scanner = new Scanner(file,"ISO-8859-1").useDelimiter(regex);
-            String aux[], separadores = "[ 0-9\\.,»«/=º°ª\\-\\+_;:?!¡¿#%\\(\\)\\*\\$\'\"\\[\\]]+";
+            String aux[], separadores = "[ 0-9\\.·,»«></=º°ª^`’£\\{\\-\\+_;:\\?!¡¿~\\|&@#%\\(\\)\\*\\$\"\\[\\]]+";
             DBPosteo dbp = new DBPosteo();
+            dbp.iniciar();
             while(scanner.hasNext())
-//            for (String line : lines)
             {                
-//                aux = line.split(separadores);
                 aux = scanner.nextLine().split(separadores);
                 for(String st : aux)
                 {
-                    st = st.toLowerCase();
+                    st = st.toLowerCase().replace("æ", "ae");
                     if(!st.equals(""))
                     {
                         if(!hash.containsKey(st))
@@ -113,7 +103,8 @@ public class ProcesadorArchivo
                         }
                     } 
                 }
-            }      
+            }
+            dbp.finalizar();
             OAHashtableWriter htw = new OAHashtableWriter(PATHVOCABULARIO);
             htw.write( hash );
         }

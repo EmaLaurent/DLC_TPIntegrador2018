@@ -7,6 +7,9 @@ package Logica;
 
 import Entidades.DatosTermino;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -19,11 +22,13 @@ public class Indexer
     private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos"; 
 //    private final String PATHINDEXACION = "";
 //    private final String PATHINDEXACION = "";
+    private int contador;
     
     public Indexer()
     {
         archivoPr = new ProcesadorArchivo();
-        hash = new TSB_OAHashtable<>(); 
+        hash = new TSB_OAHashtable<>();
+        contador = 0;
     }
 
     public TSB_OAHashtable<String, DatosTermino> getHash()
@@ -34,9 +39,16 @@ public class Indexer
     public void indexarDirectorio()
     {
         File directorio = new File(PATHINDEXACION);
+        Date date = new Date();
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        System.out.println("Inicio de proceso de indexacion a las: "+ hourFormat.format(date));
         for (File archivo : directorio.listFiles())
         {
             archivoPr.setFile(archivo);
+            contador ++;
+            date = new Date();
+            System.out.println("Archivo ("+ archivo.getName() +") procesado con éxito! Hora: "+ hourFormat.format(date));
+            System.out.println("Archivos procesados : "+ contador);
         }
         hash = archivoPr.getHash();
     }

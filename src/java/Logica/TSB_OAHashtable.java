@@ -49,12 +49,12 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
     //************************ Constructores.
 
     /**
-     * Crea una tabla vacía, con la capacidad inicial igual a 5 y con factor 
+     * Crea una tabla vacía, con la capacidad inicial igual a 11 y con factor 
      * de carga igual al 50% de la capacidad. 
      */    
     public TSB_OAHashtable()
     {
-        this(5);
+        this(11);
     }
     
     /**
@@ -203,8 +203,12 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 }
             }
             i = (int) (idMadre + Math.pow(j, 2)); //exploracion cuadratica
-            if(i > table.length -1)
-                i = i - table.length;
+            do
+            {
+                if(i > table.length -1)
+                    i = i - table.length;
+            }
+            while(i > table.length -1);
             j++;
         }
         if(flag == false)
@@ -611,8 +615,14 @@ public class TSB_OAHashtable<K,V> implements Map<K,V>, Cloneable, Serializable
                 return table[i];
             }
             i = (int) (idMadre + Math.pow(j, 2)); //exploracion cuadratica
-            if(i > table.length -1)
-                i = i - table.length;
+            do
+            {
+                if(i > table.length -1)
+                {
+                    i = i - table.length;
+                }     
+            }
+            while(i > table.length -1);
             j++;
         }
         return null;
