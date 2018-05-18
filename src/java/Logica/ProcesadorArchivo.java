@@ -27,7 +27,8 @@ public class ProcesadorArchivo
 
     private File file;
     private TSB_OAHashtable<String,DatosTermino> hash;
-    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+//    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+    private final String PATHVOCABULARIO = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
 //    private final String PATHVOCABULARIO = "";
 //    private final String PATHVOCABULARIO = "";
     
@@ -61,14 +62,14 @@ public class ProcesadorArchivo
     {
         try
         {
-            String regex = "[^a-zA-ZñÑá-úÁ-Ú]";
+            String regex = "[^a-zA-ZñÑá-úÁ-Ú\']";
             Scanner scanner = new Scanner(file,"ISO-8859-1").useDelimiter(regex);
-            String aux[], separadores = "[ 0-9\\.·,»«></=º°ª^`’£\\{\\-\\+_;:\\?!¡¿~\\|&@#%\\(\\)\\*\\$\"\\[\\]]+";
+            String aux[];
             DBPosteo dbp = new DBPosteo();
             dbp.iniciar();
             while(scanner.hasNext())
             {                
-                aux = scanner.nextLine().split(separadores);
+                aux = scanner.nextLine().split(regex);
                 for(String st : aux)
                 {
                     st = st.toLowerCase().replace("æ", "ae");

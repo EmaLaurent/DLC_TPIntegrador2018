@@ -19,7 +19,8 @@ public class Indexer
 {
     private ProcesadorArchivo archivoPr;
     private TSB_OAHashtable<String,DatosTermino> hash;
-    private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos"; 
+//    private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
+    private final String PATHINDEXACION = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
 //    private final String PATHINDEXACION = "";
 //    private final String PATHINDEXACION = "";
     private int contador;
@@ -49,6 +50,7 @@ public class Indexer
             date = new Date();
             System.out.println("Archivo ("+ archivo.getName() +") procesado con éxito! Hora: "+ hourFormat.format(date));
             System.out.println("Archivos procesados : "+ contador);
+            System.out.println("Palabras indexadas :" + archivoPr.getHash().size());
         }
         hash = archivoPr.getHash();
     }

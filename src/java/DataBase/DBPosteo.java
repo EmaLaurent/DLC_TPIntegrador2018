@@ -14,7 +14,8 @@ import java.sql.*;
  */
 public class DBPosteo
 {
-    private final String URL ="jdbc:sqlserver://PC-Laurent:1433;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true";
+//    private final String URL ="jdbc:sqlserver://PC-Laurent:1433;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true";
+    private final String URL ="jdbc:sqlserver://EMA-LENOVO:1433;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true";
 //    private final String URL =""; 
 //    private final String URL ="";
     private Connection con;

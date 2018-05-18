@@ -46,7 +46,7 @@ public class Indexar extends HttpServlet
         }
         catch(Exception e)
         {
-//            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         ServletContext app = this.getServletContext();
         RequestDispatcher disp = app.getRequestDispatcher(dest);
