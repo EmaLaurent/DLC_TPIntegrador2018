@@ -7,6 +7,9 @@ package DataBase;
 
 import Entidades.DatosPosteo;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -79,5 +82,26 @@ public class DBPosteo
         pstmt.setString(3, dp.getNombreDocumento());
         pstmt.executeUpdate();
         pstmt.close();
+    }
+    
+    public ArrayList<DatosPosteo> obtenerPosteos(String st)
+            throws SQLException
+    {
+        query = "SELECT TOP 50 * FROM Posteo WHERE termino = ? ORDER BY tf DESC";
+        pstmt = con.prepareStatement(query);
+        pstmt.setString(1, st);
+        rs = pstmt.executeQuery();
+        DatosPosteo dp = null;
+        ArrayList<DatosPosteo> list = new ArrayList<>();
+        while(rs.next())
+        {
+            dp = new DatosPosteo();
+            dp.setNombreDocumento(rs.getString("documento"));
+            dp.setTf(rs.getInt("tf"));
+            list.add(dp);
+        }
+        rs.close();
+        pstmt.close();
+        return list;
     }
 }
