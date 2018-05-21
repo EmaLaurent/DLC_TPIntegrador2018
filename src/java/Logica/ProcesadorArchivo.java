@@ -65,6 +65,7 @@ public class ProcesadorArchivo
             String regex = "[^a-zA-ZñÑá-úÁ-Ú\']";
             Scanner scanner = new Scanner(file,"ISO-8859-1").useDelimiter(regex);
             String aux[];
+            TSB_OAHashtable<String,Integer> hashDoc = new TSB_OAHashtable<>();
             DBPosteo dbp = new DBPosteo();
             dbp.iniciar();
             while(scanner.hasNext())
@@ -73,37 +74,19 @@ public class ProcesadorArchivo
                 for(String st : aux)
                 {
                     st = st.toLowerCase().replace("æ", "ae");
-                    if(!st.equals(""))
+                    if(!st.equals("") & !st.equals("\'"))
                     {
-                        if(!hash.containsKey(st))
+                        if(!hashDoc.containsKey(st))
                         {
-                            DatosTermino dt = new DatosTermino();
-                            hash.put(st, dt);
-                            DatosPosteo dp = new DatosPosteo(file.getName());
-                            dbp.insertarPosteo(st, dp);
+                            hashDoc.put(st, 1);
                         }
                         else
                         {
-                            DatosTermino x = hash.get(st);
-                            DatosPosteo dpDoc = dbp.obtenerPorDocumento(st, file.getName()); //obtenemos el objeto de posteo correspondiente al archivo actual
-                            if(dpDoc != null)
-                            {
-                                dpDoc.setTf(dpDoc.getTf() + 1); // se incrementa en uno el tf
-                                if (dpDoc.getTf() > x.getMaxTf()) // comparo el tf de este doc con el max tf de la palabra
-                                {
-                                    x.setMaxTf(dpDoc.getTf()); // reemplazo el maxTf en el vocabulario
-                                }
-                                dbp.actualizarPosteo(st, dpDoc);
-                            }
-                            else // si no esta el documento
-                            {
-                                DatosPosteo dp = new DatosPosteo(file.getName());
-                                dbp.insertarPosteo(st, dp);
-                                x.setNr(x.getNr() + 1); // incrementamos el nr la palabra en el vocabulario
-                            }
+                            hashDoc.put(st, hashDoc.get( st ) + 1);
                         }
                     } 
                 }
+                
             }
             dbp.finalizar();
             OAHashtableWriter htw = new OAHashtableWriter(PATHVOCABULARIO);
