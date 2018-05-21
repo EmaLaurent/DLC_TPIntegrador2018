@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class ProcesadorArchivo
     public void setFile(File file) 
     {
         this.file = file;
-        if(file != null)
+        if(this.file != null)
            leerArchivo();
     }
 
@@ -84,9 +85,31 @@ public class ProcesadorArchivo
                         {
                             hashDoc.put(st, hashDoc.get( st ) + 1);
                         }
-                    } 
+                    }
                 }
-                
+            }
+            Set<Map.Entry<String,Integer>> se = hashDoc.entrySet();
+            Iterator<Map.Entry<String,Integer>> it = se.iterator();
+            while(it.hasNext()) // recorremos cada palabra que encontramos en este documento (recorremos la hash temporal)
+            {
+                Entry<String,Integer> x = it.next();
+                String termino = x.getKey();
+                if (hash.contains(termino)) // si el vocabulario tiene esta palabra
+                {
+                    DatosTermino dt = hash.get(termino); // obtenemos los datos de la palabra en el vocabulario
+                    dt.setNr(dt.getNr() + 1); // sumamos 1a la cantidad de documentos
+                    if (x.getValue() > dt.getMaxTf()) // si el tf que tuvo el termino en este documento es mayor al maximo...
+                    {
+                        dt.setMaxTf(x.getValue()); // actualizarlo
+                    }
+                }
+                else // si la palabra no esta en el vocabulario
+                {
+                    DatosTermino dt = new DatosTermino();
+                    hash.put(termino, dt);
+                }
+                DatosPosteo dp = new DatosPosteo(file.getName(), x.getValue()); // se crea los datos del posteo
+                dbp.insertarPosteo(termino, dp); // se almacena el registro con los datos para ese termino
             }
             dbp.finalizar();
             OAHashtableWriter htw = new OAHashtableWriter(PATHVOCABULARIO);

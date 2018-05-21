@@ -24,6 +24,12 @@ public class DatosPosteo
         nombreDocumento = nombDoc;
         tf = 1;
     }
+    
+    public DatosPosteo(String nombDoc, int tf)
+    {
+        nombreDocumento = nombDoc;
+        this.tf = tf;
+    }
 
     public String getNombreDocumento()
     {
