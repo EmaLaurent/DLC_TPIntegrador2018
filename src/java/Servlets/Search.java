@@ -6,6 +6,7 @@
 package Servlets;
 
 import DataBase.DBPosteo;
+import Logica.ProcesadorConsulta;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -38,6 +39,8 @@ public class Search extends HttpServlet
         try
         {
             String busqueda = request.getParameter("buscar_txt");
+            ProcesadorConsulta pc = new ProcesadorConsulta();
+            pc.leerConsulta(busqueda);
             request.setAttribute("busqueda", busqueda);
             dest = "/busqueda.jsp";
             

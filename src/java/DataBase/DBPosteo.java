@@ -5,9 +5,12 @@
  */
 package DataBase;
 
+import Entidades.DatosCalificacion;
 import Entidades.DatosPosteo;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.TreeSet;
 
 /**
  *
@@ -16,8 +19,8 @@ import java.util.ArrayList;
 public class DBPosteo
 {
 //    private final String URL ="jdbc:sqlserver://PC-Laurent:1433;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true";
-    private final String URL ="jdbc:sqlserver://EMA-LENOVO:1433;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true";
-//    private final String URL =""; 
+//    private final String URL ="jdbc:sqlserver://EMA-LENOVO:1433;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true";
+    private final String URL ="jdbc:sqlserver://MANUEL-PC\\SQLEXPRESS;databaseName=DLC_MotorDeBusqueda;integratedSecurity=true"; 
 //    private final String URL ="";
     private Connection con;
     String query = "";
@@ -82,21 +85,21 @@ public class DBPosteo
         pstmt.close();
     }
     
-    public ArrayList<DatosPosteo> obtenerPosteos(String st)
+    public LinkedList<DatosCalificacion> obtenerPosteos(String st)
             throws SQLException
     {
         query = "SELECT TOP 50 * FROM Posteo WHERE termino = ? ORDER BY tf DESC";
         pstmt = con.prepareStatement(query);
         pstmt.setString(1, st);
         rs = pstmt.executeQuery();
-        DatosPosteo dp = null;
-        ArrayList<DatosPosteo> list = new ArrayList<>();
+        DatosCalificacion dc;
+        LinkedList<DatosCalificacion> list = new LinkedList<>();
         while(rs.next())
         {
-            dp = new DatosPosteo();
-            dp.setNombreDocumento(rs.getString("documento"));
-            dp.setTf(rs.getInt("tf"));
-            list.add(dp);
+            dc = new DatosCalificacion();
+            dc.setNombreDoc(rs.getString("documento"));
+            dc.setTf(rs.getInt("tf"));
+            list.add(dc);
         }
         rs.close();
         pstmt.close();

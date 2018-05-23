@@ -20,8 +20,8 @@ public class Indexer
     private ProcesadorArchivo archivoPr;
     private TSB_OAHashtable<String,DatosTermino> hash;
 //    private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
-    private final String PATHINDEXACION = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
-//    private final String PATHINDEXACION = "";
+//    private final String PATHINDEXACION = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
+    private final String PATHINDEXACION = "d:\\Users\\Manuel\\Desktop\\UTN\\[DLC] Diseño de Lenguajes de Consulta\\TPIntegrador\\docs7";
 //    private final String PATHINDEXACION = "";
     private int contador;
     
