@@ -5,16 +5,20 @@
  */
 package Servlets;
 
-import DataBase.DBPosteo;
+import Entidades.DatosTermino;
+import Entidades.ResultadoDeBusqueda;
+import Logica.OAHashtableReader;
 import Logica.ProcesadorConsulta;
+import Logica.TSB_OAHashtable;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -22,7 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class Search extends HttpServlet
 {
-
+    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+//    private final String PATHVOCABULARIO = "d:\\Users\\Manuel\\Desktop\\UTN\\[DLC] Diseño de Lenguajes de Consulta\\TPIntegrador\\HashTable\\tabla.dat";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,20 +41,38 @@ public class Search extends HttpServlet
     throws ServletException, IOException
     {
         String dest = "/error.html";
+        TSB_OAHashtable<String,DatosTermino> hash;
+        HttpSession session = request.getSession();
         try
         {
+            if(session.getAttribute("tabla") == null)
+            {
+                OAHashtableReader slr = new OAHashtableReader(PATHVOCABULARIO);
+                hash = (TSB_OAHashtable<String,DatosTermino>) slr.read();
+                session.setAttribute("tabla", hash);
+            }
+            else
+                hash = (TSB_OAHashtable<String,DatosTermino>) session.getAttribute("tabla");
             String busqueda = request.getParameter("buscar_txt");
-            ProcesadorConsulta pc = new ProcesadorConsulta();
-            pc.leerConsulta(busqueda);
+            ProcesadorConsulta pc = new ProcesadorConsulta(hash);
+            ArrayList<ResultadoDeBusqueda> resultados = pc.leerConsulta(busqueda);
+            if(resultados == null || resultados.isEmpty())
+               ; //proximamente (aca informaremos que no existen resultados para esa busqueda
+            else
+                request.setAttribute("resultados", resultados);
             request.setAttribute("busqueda", busqueda);
             dest = "/busqueda.jsp";
             
         }
+        catch(IOException e)
+        {
+            System.out.println("Error: " + e.getMessage());    
+        }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
-        
+
         ServletContext app = this.getServletContext();
         RequestDispatcher disp = app.getRequestDispatcher(dest);
         disp.forward(request, response);

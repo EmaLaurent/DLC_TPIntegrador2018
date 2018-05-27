@@ -35,6 +35,7 @@
                     </nav>
                 </div>
             </div>
+            <%--
             <div class="row">
                 <div class="d-flex justify-content-center col-12">
                     <div class='p-3'>
@@ -45,6 +46,7 @@
                     </div>
                 </div>
             </div>
+            --%>
             <div class="mt-auto">
                 <form accept-charset="ISO-8859-1" id="search_form" method="post" action="<c:url value="/search"/>">
                     <main role="main" class="inner cover">

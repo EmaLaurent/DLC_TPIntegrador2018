@@ -49,5 +49,5 @@ public class DatosPosteo
     public void setTf(int tf)
     {
         this.tf = tf;
-    }  
+    }
 }
