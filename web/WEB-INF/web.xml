@@ -22,4 +22,11 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    <context-param> 
+        <description>Ubicacion de almacenamiento de archivos cargados</description> 
+        <param-name>file-upload</param-name> 
+        <param-value>
+            E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos/
+        </param-value> 
+    </context-param>
 </web-app>

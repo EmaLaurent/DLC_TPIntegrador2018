@@ -9,17 +9,17 @@ package Entidades;
  *
  * @author Emanuel Laurent
  */
-public class ResultadoDeBusqueda
+public class ResultadoDeBusqueda implements Comparable<ResultadoDeBusqueda>
 {
     private Documento doc;
-    private float calificacion;
+    private int calificacion;
 
     public ResultadoDeBusqueda()
     {
         
     }
 
-    public ResultadoDeBusqueda(Documento doc, float calificacion)
+    public ResultadoDeBusqueda(Documento doc, int calificacion)
     {
         this.doc = doc;
         this.calificacion = calificacion;
@@ -30,7 +30,7 @@ public class ResultadoDeBusqueda
         return doc;
     }
 
-    public float getCalificacion()
+    public int getCalificacion()
     {
         return calificacion;
     }
@@ -40,8 +40,14 @@ public class ResultadoDeBusqueda
         this.doc = doc;
     }
 
-    public void setCalificacion(float calificacion)
+    public void setCalificacion(int calificacion)
     {
         this.calificacion = calificacion;
+    }
+
+    @Override
+    public int compareTo(ResultadoDeBusqueda o) 
+    {
+        return calificacion - o.getCalificacion();
     }
 }

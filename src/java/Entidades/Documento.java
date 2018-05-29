@@ -19,8 +19,8 @@ public class Documento
     private String titulo;
     private String intro = "";
     private String path;
-    private final String PATHDOCUMENTOS = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos/";
-//    private final String PATHDOCUMENTOS = "";
+//    private final String PATHDOCUMENTOS = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos/";
+    private final String PATHDOCUMENTOS = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos/";
 //    private final String PATHDOCUMENTOS = "";
     
     public Documento()

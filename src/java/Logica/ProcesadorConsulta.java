@@ -14,13 +14,10 @@ import Entidades.ResultadoDeBusqueda;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *
- * @author Manuel
+ * @author Manuel, Laurent Emanuel
  */
 public class ProcesadorConsulta
 {
@@ -37,6 +34,7 @@ public class ProcesadorConsulta
         String aux[];
         ArrayList<DatosConsulta> tfs;
         ArrayList<ResultadoDeBusqueda> resultados = null;
+        ArrayList<ResultadoDeBusqueda> resultTemp;
         if(consulta.equals(""))
             return resultados;
         aux = consulta.split(regex);
@@ -55,7 +53,7 @@ public class ProcesadorConsulta
         {    
             DBPosteo dbp = new DBPosteo();
             dbp.iniciar();
-            resultados = new ArrayList<>();
+            resultTemp = new ArrayList<>();
             for (DatosConsulta d : tfs) // recorremos las palabras de la consulta segun orden de relevancia
             {
                 ArrayList<DatosPosteo> listaPosteo;
@@ -64,31 +62,36 @@ public class ProcesadorConsulta
                 {
                     for (DatosPosteo dp : listaPosteo)
                     {
+                        boolean flag = false;
                         Documento doc = new Documento();
                         doc.obtenerInfo(dp.getNombreDocumento());
-                        float calificacion = (float)(dp.getTf() * Math.log(593 / d.getNr()));
-                        ResultadoDeBusqueda res = new ResultadoDeBusqueda(doc, calificacion);
-                        resultados.add(res);
-    //                    if (hasht.contains(dp.getNombreDocumento()))
-    //                    {
-    //                        hasht.put(dp.getNombreDocumento(), hasht.get(dp.getNombreDocumento()) + calificacion);
-    //                    }
-    //                    else
-    //                    {
-    //                        hasht.put(dp.getNombreDocumento(), calificacion);
-    //                    }
+                        double calculo = dp.getTf() * Math.log(593 / d.getNr());
+                        int calificacion = (int)Math.round(calculo);
+                        for( ResultadoDeBusqueda r : resultTemp)
+                        {
+                            if(r.getDoc().getNombArchivo().equals(doc.getNombArchivo()))
+                            {
+                                r.setCalificacion(r.getCalificacion() + calificacion);
+                                flag = true;
+                                break;
+                            }    
+                        }
+                        if(flag == false)
+                        {
+                            ResultadoDeBusqueda res = new ResultadoDeBusqueda(doc, calificacion);
+                            resultTemp.add(res);
+                        }
                     }
                 }
             }
-//            Set<Map.Entry<String,Double>> se = hasht.entrySet();
-//            Iterator<Map.Entry<String,Double>> it = se.iterator();
-//
-//            Map.Entry<String,Double> max = it.next();
-//            while(it.hasNext())
-//            {
-//                Map.Entry<String,Double> x = it.next();
-//                if (max.getValue() < x.getValue()) max = x;
-//            }
+            if(resultTemp.isEmpty())
+                return resultados;
+            Collections.sort(resultTemp, Collections.reverseOrder());
+            resultados = new ArrayList<>(50);
+            for(int i = 0; i < 50 & i < resultTemp.size(); i++)
+            {
+                resultados.add(resultTemp.get(i));
+            }
         }
         catch (ClassNotFoundException | SQLException e)
         {

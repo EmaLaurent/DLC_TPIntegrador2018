@@ -47,6 +47,16 @@
                 </div>
             </div>
             --%>
+            <div class="row">
+                <div class="d-flex justify-content-center col-12">
+                    <div class='p-3'>
+                        <form method="post" id="subirArchivo" enctype="multipart/form-data" action="<c:url value="/indexar"/>">
+                            <input type="file" name="file_btn" accept=".txt">
+                            <input type="submit" value="Indexar" class="btn btn-outline-danger">
+                        </form>  
+                    </div>
+                </div>
+            </div>
             <div class="mt-auto">
                 <form accept-charset="ISO-8859-1" id="search_form" method="post" action="<c:url value="/search"/>">
                     <main role="main" class="inner cover">
@@ -65,8 +75,7 @@
                 </div>
             </footer>
         </div>         
-        
-        </div>
+        <%--
         <script type="text/javascript">
             function indexar() 
             {
@@ -74,6 +83,7 @@
             }
             document.getElementById("indexar_btn").onclick = indexar;
         </script>
+        --%>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="<c:url value="/js/jquery-3.3.1.slim.min.js"/>" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

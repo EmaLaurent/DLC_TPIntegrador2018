@@ -19,8 +19,8 @@ public class Indexer
 {
     private ProcesadorArchivo archivoPr;
     private TSB_OAHashtable<String,DatosTermino> hash;
-    private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
-//    private final String PATHINDEXACION = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
+//    private final String PATHINDEXACION = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
+    private final String PATHINDEXACION = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
 //    private final String PATHINDEXACION = "d:\\Users\\Manuel\\Desktop\\UTN\\[DLC] Diseño de Lenguajes de Consulta\\TPIntegrador\\docs7";
 //    private final String PATHINDEXACION = "";
     private int contador;
@@ -32,6 +32,13 @@ public class Indexer
         contador = 0;
     }
 
+    public Indexer(TSB_OAHashtable<String, DatosTermino> hash)
+    {
+        archivoPr = new ProcesadorArchivo(hash);
+        this.hash = hash;
+        contador = 0;
+    }
+    
     public TSB_OAHashtable<String, DatosTermino> getHash()
     {
         return hash;
@@ -53,5 +60,14 @@ public class Indexer
             System.out.println("Palabras indexadas :" + archivoPr.getHash().size());
         }
         hash = archivoPr.getHash();
+    }
+    
+    public void indexarArchivo(File archivo)
+    {
+        Date date = new Date();
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        System.out.println("Inicio de proceso de indexacion a las: "+ hourFormat.format(date));
+        archivoPr.setFile(archivo);
+        System.out.println("Archivo ("+ archivo.getName() +") procesado con éxito! Hora: "+ hourFormat.format(date));
     }
 }

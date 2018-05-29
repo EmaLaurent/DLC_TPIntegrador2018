@@ -26,7 +26,8 @@ import javax.servlet.http.HttpSession;
  */
 public class Search extends HttpServlet
 {
-    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+//    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+    private final String PATHVOCABULARIO = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
 //    private final String PATHVOCABULARIO = "d:\\Users\\Manuel\\Desktop\\UTN\\[DLC] Diseño de Lenguajes de Consulta\\TPIntegrador\\HashTable\\tabla.dat";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,7 +60,11 @@ public class Search extends HttpServlet
             if(resultados == null || resultados.isEmpty())
                ; //proximamente (aca informaremos que no existen resultados para esa busqueda
             else
+            {
                 request.setAttribute("resultados", resultados);
+                request.setAttribute("maxCalif", resultados.get(0).getCalificacion());
+            }
+                
             request.setAttribute("busqueda", busqueda);
             dest = "/busqueda.jsp";
             

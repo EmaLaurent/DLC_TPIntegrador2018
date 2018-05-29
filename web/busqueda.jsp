@@ -51,15 +51,22 @@
             <h3>Resultados de Búsqueda para : ${busqueda}</h3>
             <hr width="80%" style="background: gray">
             <c:forEach items="${resultados}" var="resultado">
-                <div class="row docInfo p-1">
-                    <div class="card bg-dark border-light col-7 offset-1">
-                        <div class="card-header">
-                            <a class="h5" href="file:///${resultado.doc.path}">${resultado.doc.titulo}</a>
+                <div class="row">
+                    <div class="col-7">
+                        <div class="row docInfo p-1">
+                            <div class="card bg-dark border-light offset-1">
+                                <div class="card-header">
+                                    <a class="h5" href="file:///${resultado.doc.path}">${resultado.doc.titulo}</a>
+                                </div>
+                                <div class="text-light">
+                                    <h6 class="mb-2 text-warning">${resultado.doc.nombArchivo}</h6>
+                                    <p class="card-text">${resultado.doc.intro}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-light">
-                            <h6 class="mb-2 text-warning">${resultado.doc.nombArchivo}</h6>
-                            <p class="card-text">${resultado.doc.intro}</p>
-                        </div>
+                    </div>
+                    <div class="col-2 text-left">
+                        <h4><span class="badge badge-success">${resultado.calificacion}/${maxCalif}</span></h4>
                     </div>
                 </div>
             </c:forEach>

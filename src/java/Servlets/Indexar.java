@@ -5,23 +5,34 @@
  */
 package Servlets;
 
+import Entidades.DatosTermino;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Logica.Indexer;
+import Logica.OAHashtableReader;
 import Logica.TSB_OAHashtable;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author Emanuel Laurent
  */
+@MultipartConfig
 public class Indexar extends HttpServlet
 {
-
+//    private final String PATHVOCABULARIO = "D:/Usuarios/Ema/Mis Documentos/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+    private final String PATHVOCABULARIO = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/tabla.dat";
+//    private final String PATHVOCABULARIO = "d:\\Users\\Manuel\\Desktop\\UTN\\[DLC] Diseño de Lenguajes de Consulta\\TPIntegrador\\HashTable\\tabla.dat";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,16 +46,39 @@ public class Indexar extends HttpServlet
             throws ServletException, IOException
     {
         String dest = "/error.html";
-        Indexer indx = new Indexer();
-        TSB_OAHashtable tablaHash;
+        //Obtenemos el archivo cargado en el jsp junto con sus datos
+        Part filePart = request.getPart("file_btn");
+        String fileName = filePart.getSubmittedFileName();
+        //Obtenemos el path donde se guardara el archivo
+        File uploads = new File(getServletContext().getInitParameter("file-upload"));
+        File file = new File(uploads, fileName);
+        TSB_OAHashtable hash;
+        HttpSession session = request.getSession();
         try
         {
-            indx.indexarDirectorio();
-            tablaHash = indx.getHash();
-            request.setAttribute("cantPalabras",tablaHash.size());
+            if(session.getAttribute("tabla") == null)
+            {
+                OAHashtableReader slr = new OAHashtableReader(PATHVOCABULARIO);
+                hash = (TSB_OAHashtable<String,DatosTermino>) slr.read();
+                session.setAttribute("tabla", hash);
+            }
+            else
+                hash = (TSB_OAHashtable<String,DatosTermino>) session.getAttribute("tabla");
+            Indexer indx = new Indexer(hash);
+            //Leemos el archivo cargado y lo guardamos en el directorio predefinido
+            InputStream fileContent = filePart.getInputStream();
+            Files.copy(fileContent, file.toPath());
+            indx.indexarArchivo(file);
             dest = "/index.jsp";
         }
-        catch(Exception e)
+//        try
+//        {
+//            indx.indexarDirectorio();
+//            tablaHash = indx.getHash();
+//            request.setAttribute("cantPalabras",tablaHash.size());
+//            dest = "/index.jsp";
+//        }
+        catch(IOException e)
         {
             System.out.println("Error: " + e.getMessage());
         }
