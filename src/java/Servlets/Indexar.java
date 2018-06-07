@@ -17,6 +17,7 @@ import Logica.TSB_OAHashtable;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.MultipartConfig;
@@ -67,7 +68,7 @@ public class Indexar extends HttpServlet
             Indexer indx = new Indexer(hash);
             //Leemos el archivo cargado y lo guardamos en el directorio predefinido
             InputStream fileContent = filePart.getInputStream();
-            Files.copy(fileContent, file.toPath());
+            Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             indx.indexarArchivo(file);
             dest = "/index.jsp";
         }

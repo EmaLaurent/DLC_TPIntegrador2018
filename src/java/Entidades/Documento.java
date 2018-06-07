@@ -91,12 +91,17 @@ public class Documento
             path = PATHDOCUMENTOS + archivo;
             for(int i = 0; i<6;)
             {
-                aux = scanner.nextLine();
-                if(!aux.equals(""))
+                if(scanner.hasNext())
                 {
-                    intro += aux + " ";
-                    i++;
+                  aux = scanner.nextLine();
+                    if(!aux.equals(""))
+                    {
+                        intro += aux + " ";
+                        i++;
+                    }  
                 }
+                else
+                    break;
             }
             intro += "...";
         }

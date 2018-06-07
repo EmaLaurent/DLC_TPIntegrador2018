@@ -11,6 +11,7 @@ import Entidades.DatosConsulta;
 import Entidades.DatosPosteo;
 import Entidades.Documento;
 import Entidades.ResultadoDeBusqueda;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.Collections;
  */
 public class ProcesadorConsulta
 {
+    private final String PATHINDEXACION = "E:/Users/milen/Documents/Facu UTN/2018/DLC/DLC_TPIntegrador2018/Documentos";
     private final TSB_OAHashtable<String,DatosTermino> HASH;
 
     public ProcesadorConsulta(TSB_OAHashtable<String,DatosTermino> hash)
@@ -30,6 +32,7 @@ public class ProcesadorConsulta
     
     public ArrayList<ResultadoDeBusqueda> leerConsulta(String consulta)
     {
+        File directorio = new File(PATHINDEXACION);
         String regex = "[^a-zA-ZñÑá-úÁ-Ú\']";
         String aux[];
         ArrayList<DatosConsulta> tfs;
@@ -65,7 +68,7 @@ public class ProcesadorConsulta
                         boolean flag = false;
                         Documento doc = new Documento();
                         doc.obtenerInfo(dp.getNombreDocumento());
-                        double calculo = dp.getTf() * Math.log(593 / d.getNr());
+                        double calculo = dp.getTf() * Math.log(directorio.listFiles().length / d.getNr());
                         int calificacion = (int)Math.round(calculo);
                         for( ResultadoDeBusqueda r : resultTemp)
                         {
